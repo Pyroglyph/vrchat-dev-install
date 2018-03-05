@@ -31,30 +31,46 @@ Else
 
 
     # Install Chocolatey (if it isn't already)
-    If (choco -noop -NOT -LIKE "Chocolatey")
+    If (-NOT (Get-Command choco -errorAction SilentlyContinue))
     {
         Invoke-Expression ((New-Object System.Net.WebClient).DownloadString("https://chocolatey.org/install.ps1"))
     }
 
 
-    # Install Blender and Unity
+    # Install Blender
     Write-Output "`n======================`n= Installing Blender =`n======================`n"
     choco install -y blender
+
+    # Install Unity
+    # (I would have used Chocolatey again but they don't have the right version of Unity)
     Write-Output "`n======================`n=  Installing Unity  =`n======================`n"
-    choco install -y unity --version 5.6.3p1
+    (New-Object System.Net.WebClient).DownloadFile("https://beta.unity3d.com/download/9c92e827232b/Windows64EditorInstaller/UnitySetup64-5.6.3p1.exe", "$env:TEMP/UnitySetup64-5.6.3p1.exe")
+    & "$env:TEMP/UnitySetup64-5.6.3p1.exe" /S
 
 
     # Download and install the latest VRCSDK
+    # (most of this is just testing for and removing old files)
     Write-Output "`n======================`n= Downloading VRCSDK =`n======================`n"
-    (New-Object System.Net.WebClient).DownloadFile("https://www.vrchat.net/download/sdk", "%TEMP%/VRCSDK.unityPackage")
+    $UnityProjectsPath = [Environment]::GetFolderPath("MyDocuments") + "/Unity Projects"
 
-    If (-NOT (Test-Path -Path "~/Documents/Unity Projects"))
+    If (Test-Path -Path "$env:TEMP/VRCSDK.unityPackage")
     {
-        New-Item -Path "~/Documents/Unity Projects" -ItemType Directory
+        Remove-Item -Path "$env:TEMP/VRCSDK.unityPackage"
+    }
+    
+    (New-Object System.Net.WebClient).DownloadFile("https://www.vrchat.net/download/sdk", "$env:TEMP/VRCSDK.unityPackage")
+
+    If (-NOT (Test-Path -Path $UnityProjectsPath))
+    {
+        New-Item -Path $UnityProjectsPath -ItemType Directory
     }
 
-    Remove-Item -Path "~/Documents/Unity Projects/VRCSDK.unityPackage"
-    Move-Item -Path "%TEMP%/VRCSDK.unityPackage" -Destination "~/Documents/Unity Projects/VRCSDK.unityPackage"
+    If (Test-Path -Path "$UnityProjectsPath/VRCSDK.unityPackage")
+    {
+        Remove-Item -Path "$UnityProjectsPath/VRCSDK.unityPackage"
+    }
+
+    Move-Item -Path "$env:TEMP/VRCSDK.unityPackage" -Destination "$UnityProjectsPath/VRCSDK.unityPackage"
 
 
     # We're done!
