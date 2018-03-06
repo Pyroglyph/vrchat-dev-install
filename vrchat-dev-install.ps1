@@ -41,10 +41,13 @@ Else
     Write-Output "`n======================`n= Installing Blender =`n======================`n"
     choco install -y blender
 
+
     # Install Unity
     # (I would have used Chocolatey again but they don't have the right version of Unity)
     Write-Output "`n======================`n=  Installing Unity  =`n======================`n"
+    Write-Output "Downloading... (this might take a while)"
     (New-Object System.Net.WebClient).DownloadFile("https://beta.unity3d.com/download/9c92e827232b/Windows64EditorInstaller/UnitySetup64-5.6.3p1.exe", "$env:TEMP/UnitySetup64-5.6.3p1.exe")
+    Write-Output "Installing..."
     & "$env:TEMP/UnitySetup64-5.6.3p1.exe" /S
 
 
@@ -58,6 +61,7 @@ Else
         Remove-Item -Path "$env:TEMP/VRCSDK.unityPackage"
     }
     
+    Write-Output "Downloading..."
     (New-Object System.Net.WebClient).DownloadFile("https://www.vrchat.net/download/sdk", "$env:TEMP/VRCSDK.unityPackage")
 
     If (-NOT (Test-Path -Path $UnityProjectsPath))
