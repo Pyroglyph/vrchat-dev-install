@@ -1,12 +1,12 @@
 # The VRChat Development Environment Installer
 > I should come up with a catchier name...
 
-A completely automated script that sets up VRChat's content creation pipeline!
+A completely automated script to set up your VRChat content creation pipeline!
 
 ## Features
-- Automatically installs Blender and Unity 5.6.3p1
+- Automatically installs Blender and Unity 5.6.3p1 if needed
 
-- Downloads the latest VRChat SDK and places it in the Unity Projects folder, ready for use
+- Downloads the latest VRChat SDK and places it in the default Unity Projects folder, ready for use
 
 _Did I mention that this is completely automatic?_
 
@@ -21,11 +21,11 @@ _Did I mention that this is completely automatic?_
 
 ## Planned Features
 
-- Auto-create a VRChat project with the SDK pre-installed
+- [ ] Auto-create a VRChat project with the SDK pre-installed
 
-- Check to see if Blender and/or Unity is already installed
+- [x] Check to see if Blender and/or Unity is already installed
 
-- Progress bars for downloads (_because it's not fun to look at a console with no output :/_)
+- [ ] Progress bars for downloads (_because it's not fun to look at a console with no output :/_)
 
 ## Stuff you might want to know
 

@@ -38,22 +38,44 @@ Else
 
 
     # Install Blender
-    Write-Output "`n======================`n= Installing Blender =`n======================`n"
-    choco install -y blender
+    Write-Output "`n`n======================`n= Installing Blender =`n======================`n"
+    $key = "Registry::HKEY_CURRENT_USER\SOFTWARE\Blender Foundation\Blender"
+    if ((Get-ItemPropertyValue -Path $key -Name "installed") -eq 1)
+    {
+        # Blender is already installed, so we can skip this part!
+        Write-Output "Blender installation already found! Skipping install..."
+    }
+    else
+    {
+        Write-Warning "`n `
+There is currently no way to reliably check whether Blender is installed.`n `
+You may already have it, but the script couldn't find it so it will be installed into the default location."
+        choco install -y blender
+    }
 
 
     # Install Unity
     # (I would have used Chocolatey again but they don't have the right version of Unity)
-    Write-Output "`n======================`n=  Installing Unity  =`n======================`n"
-    Write-Output "Downloading... (this might take a while)"
-    (New-Object System.Net.WebClient).DownloadFile("https://beta.unity3d.com/download/9c92e827232b/Windows64EditorInstaller/UnitySetup64-5.6.3p1.exe", "$env:TEMP/UnitySetup64-5.6.3p1.exe")
-    Write-Output "Installing..."
-    & "$env:TEMP/UnitySetup64-5.6.3p1.exe" /S
+    Write-Output "`n`n======================`n=  Installing Unity  =`n======================`n"
+    # Check if Unity is already installed...
+    $key = "Registry::HKEY_CURRENT_USER\SOFTWARE\Unity Technologies\Installer\Unity"
+    if ((Get-ItemPropertyValue -Path $key -Name "Version") -eq "5.6.3p1")
+    {
+        # Unity is already installed, so we can skip this part!
+        Write-Output "Unity installation already found! Skipping install..."
+    }
+    else
+    {
+        Write-Output "Downloading Unity... (this might take a while)"
+        (New-Object System.Net.WebClient).DownloadFile("https://beta.unity3d.com/download/9c92e827232b/Windows64EditorInstaller/UnitySetup64-5.6.3p1.exe", "$env:TEMP/UnitySetup64-5.6.3p1.exe")
+        Write-Output "Installing..."
+        & "$env:TEMP/UnitySetup64-5.6.3p1.exe" /S
+    }
 
 
     # Download and install the latest VRCSDK
     # (most of this is just testing for and removing old files)
-    Write-Output "`n======================`n= Downloading VRCSDK =`n======================`n"
+    Write-Output "`n`n======================`n= Downloading VRCSDK =`n======================`n"
     $UnityProjectsPath = [Environment]::GetFolderPath("MyDocuments") + "/Unity Projects"
 
     If (Test-Path -Path "$env:TEMP/VRCSDK.unityPackage")
@@ -78,5 +100,5 @@ Else
 
 
     # We're done!
-    Write-Output "`n`n`nFinished successfully!"
+    Write-Output "`n`nFinished successfully!"
 }
