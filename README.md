@@ -25,7 +25,7 @@ _Did I mention that this is completely automatic?_
 
 - [x] Check to see if Blender and/or Unity is already installed
 
-- [ ] Progress bars for downloads (_because it's not fun to look at a console with no output :/_)
+- [x] Progress bars for (some) downloads, because it's not fun to look at a console with no output :/
 
 ## Stuff you might want to know
 
